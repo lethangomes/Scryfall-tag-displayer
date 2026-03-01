@@ -129,7 +129,7 @@ if(!document.getElementById('tag-container')){
                                         inheritedATags.add(ancestor);
                                     }
                                 }
-                                let iATagTable = createTable(['Inherited Oracle Tags'], [...inheritedATags], 'atag')
+                                let iATagTable = createTable(['Inherited Art Tags'], [...inheritedATags], 'atag')
                                 tagDiv.appendChild(iATagTable)
                                 
                                 // Move print info and our tag info into the container we made
