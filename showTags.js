@@ -91,7 +91,13 @@ if(!document.getElementById('tag-container')){
                                 let tagDiv = document.createElement('div');
                                 tagDiv.className = 'prints';
 
-                                let cardProfileElement = document.getElementById('main').firstElementChild.firstElementChild // The area with card info
+                                let cardProfileElement; // The area with card info
+                                for(child of document.getElementById('main').childNodes){
+                                    if(child.className === 'card-profile'){
+                                        cardProfileElement = child.firstElementChild;
+                                        break;
+                                    }
+                                }
                                 let printsDiv = cardProfileElement.lastElementChild // The element holding list of printings
                                 let container = document.createElement('div') // A container for later
                                 container.id = 'tag-container'

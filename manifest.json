@@ -18,5 +18,14 @@
 
   "permissions": [
     "https://tagger.scryfall.com/card/*"
-  ]
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "data_collection_permissions": {
+        "required": ["none"],
+        "optional": []
+      }
+    }
+  }
 }
