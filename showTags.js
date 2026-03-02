@@ -182,13 +182,13 @@ if(!document.getElementById('tag-container')){
                                 tagDiv.appendChild(oTagTable)
 
                                 // Inherited oracle tags table
-                                let inheritedOTags = new Set()
+                                let inheritedOTags = new Map()
                                 for(let tag of tags.filter((t) => t.type === 'ORACLE_CARD_TAG')){
                                     for(ancestor of tag.ancestors){
-                                        inheritedOTags.add(ancestor);
+                                        inheritedOTags.set(ancestor.name, ancestor);
                                     }
                                 }
-                                let iOTagTable = createTable(['Inherited Oracle Tags'], [...inheritedOTags], buildTagTableCell('otag'))
+                                let iOTagTable = createTable(['Inherited Oracle Tags'], [...inheritedOTags.values()], buildTagTableCell('otag'))
                                 tagDiv.appendChild(iOTagTable)
 
                                 // Art tags table
@@ -197,17 +197,17 @@ if(!document.getElementById('tag-container')){
                                 tagDiv.appendChild(aTagTable)
 
                                 // Inherited art tags table
-                                let inheritedATags = new Set()
+                                let inheritedATags = new Map()
                                 for(let tag of tags.filter((t) => t.type === 'ILLUSTRATION_TAG')){
                                     for(ancestor of tag.ancestors){
-                                        inheritedATags.add(ancestor);
+                                        inheritedATags.set(ancestor.name, ancestor);
                                     }
                                 }
-                                let iATagTable = createTable(['Inherited Art Tags'], [...inheritedATags], buildTagTableCell('atag'))
+                                let iATagTable = createTable(['Inherited Art Tags'], [...inheritedATags.values()], buildTagTableCell('atag'))
                                 tagDiv.appendChild(iATagTable)
 
                                 // Relationships
-                                let relTable = createTable(['Related Cards', 'Type'], relationships, buildRelationshipCell(json.data.card.name))
+                                let relTable = createTable(['Related Cards'], relationships, buildRelationshipCell(json.data.card.name))
                                 tagDiv.appendChild(relTable);
                                 
                                 // Move print info and our tag info into the container we made
