@@ -11,17 +11,19 @@
 
   "content_scripts": [
     {
-      "matches": ["*://scryfall.com/card/*"],
+      "matches": ["*://scryfall.com/*"],
       "js": ["showTags.js"]
     }
   ],
 
   "permissions": [
-    "https://tagger.scryfall.com/card/*"
+    "https://tagger.scryfall.com/card/*",
+    "https://api.scryfall.com/*"
   ],
 
   "browser_specific_settings": {
     "gecko": {
+      "id": "{49569f46-4dc5-4b32-a947-51512138d74d}",
       "data_collection_permissions": {
         "required": ["none"],
         "optional": []
