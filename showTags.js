@@ -101,6 +101,9 @@ function createTable(headers, content, cellBuilder){
     table.appendChild(thead);
     table.appendChild(body);
     table.className = 'prints-table'
+    table.style.width = '480px'
+    table.style.margin = '10px'
+    table.style.height = 'fit-content'
     return table
 }
 
@@ -162,24 +165,36 @@ if(!document.getElementById('tag-container')){
                                 let cardProfileElement; // The area with card info
                                 for(child of document.getElementById('main').childNodes){
                                     if(child.className === 'card-profile'){
-                                        cardProfileElement = child.firstElementChild;
+                                        cardProfileElement = child;
                                         break;
                                     }
                                 }
-                                let printsDiv;// The element holding list of printings
-                                for(child of cardProfileElement.childNodes){
-                                    if(child.className === 'prints')
-                                        printsDiv = child;
-                                    if(child.className === 'card-text ')
-                                        child.style.height = 'fit-content';
-                                }
-                                let container = document.createElement('div') // A container for later
-                                container.id = 'tag-container'
 
                                 // Oracle tags table
                                 let otags = tags.filter((t) => t.type === 'ORACLE_CARD_TAG').map((t) => ({name: t.name, desc: t.description}))
-                                let oTagTable = createTable(['Oracle Tags'], otags, buildTagTableCell('otag'))
-                                tagDiv.appendChild(oTagTable)
+                                if(otags.length > 0){
+                                    let oTagTable = createTable(['Oracle Tags'], otags, buildTagTableCell('otag'))
+                                    tagDiv.appendChild(oTagTable)
+                                }
+                                
+
+                                // Art tags table
+                                let atags = tags.filter((t) => t.type === 'ILLUSTRATION_TAG').map((t) => ({name: t.name, desc: t.description}))
+                                if(atags.length > 0){
+                                    let aTagTable = createTable(['Art Tags'], atags, buildTagTableCell('atag'))
+                                    tagDiv.appendChild(aTagTable)
+                                }
+
+                                // Relationships
+                                if(relationships.length > 0){
+                                    let relTable = createTable(['Related Cards'], relationships, buildRelationshipCell(json.data.card.name))
+                                    tagDiv.appendChild(relTable);
+                                }
+
+                                let divider = document.createElement('div');
+                                divider.style.height = '0';
+                                divider.style.flexBasis = '100%';
+                                tagDiv.appendChild(divider);
 
                                 // Inherited oracle tags table
                                 let inheritedOTags = new Map()
@@ -188,13 +203,11 @@ if(!document.getElementById('tag-container')){
                                         inheritedOTags.set(ancestor.name, ancestor);
                                     }
                                 }
-                                let iOTagTable = createTable(['Inherited Oracle Tags'], [...inheritedOTags.values()], buildTagTableCell('otag'))
-                                tagDiv.appendChild(iOTagTable)
-
-                                // Art tags table
-                                let atags = tags.filter((t) => t.type === 'ILLUSTRATION_TAG').map((t) => ({name: t.name, desc: t.description}))
-                                let aTagTable = createTable(['Art Tags'], atags, buildTagTableCell('atag'))
-                                tagDiv.appendChild(aTagTable)
+                                if([...inheritedOTags.values()].length > 0){
+                                    let iOTagTable = createTable(['Inherited Oracle Tags'], [...inheritedOTags.values()], buildTagTableCell('otag'))
+                                    tagDiv.appendChild(iOTagTable)
+                                }
+                                
 
                                 // Inherited art tags table
                                 let inheritedATags = new Map()
@@ -203,29 +216,24 @@ if(!document.getElementById('tag-container')){
                                         inheritedATags.set(ancestor.name, ancestor);
                                     }
                                 }
-                                let iATagTable = createTable(['Inherited Art Tags'], [...inheritedATags.values()], buildTagTableCell('atag'))
-                                tagDiv.appendChild(iATagTable)
-
-                                // Relationships
-                                let relTable = createTable(['Related Cards'], relationships, buildRelationshipCell(json.data.card.name))
-                                tagDiv.appendChild(relTable);
+                                if([...inheritedATags.values()].length > 0 ){
+                                    let iATagTable = createTable(['Inherited Art Tags'], [...inheritedATags.values()], buildTagTableCell('atag'))
+                                    tagDiv.appendChild(iATagTable)
+                                }
                                 
                                 // Move print info and our tag info into the container we made
-                                cardProfileElement.appendChild(container)
-                                container.appendChild(printsDiv)
-                                container.appendChild(tagDiv)
+                                cardProfileElement.appendChild(tagDiv)
 
                                 // Fix widths
-                                printsDiv.style.width = '100%'
-                                printsDiv.className = ''
                                 tagDiv.style.width = '100%'
-                                tagDiv.style.marginTop = '10px'
-                                container.className = 'prints'
-                                //container.style.width = '35%' // this is how big the prints table normally is
-
-                                // container.style.margin = '0 0 0 10px'
-                                // printsDiv.style.margin = '20px 0 0 0';
-                                // tagDiv.style.margin = '20px 0 0 0';
+                                tagDiv.style.margin = '30px auto'
+                                tagDiv.style.flexFlow = 'row wrap'
+                                tagDiv.style.display = 'flex'
+                                //tagDiv.style.maxWidth = '1000px'
+                                tagDiv.id = 'tag-container'
+                                tagDiv.style.marginTop = '30px'
+                                tagDiv.style.justifyContent= "center";
+                                tagDiv.style.borderTop = '1px dashed #CDCDCD'
                             })
                     })
                 })
