@@ -171,30 +171,13 @@ async function addTags(){
             }
 
             // Oracle tags table
+            let otagBox = document.createElement('div')
             let otags = tags.filter((t) => t.type === 'ORACLE_CARD_TAG').map((t) => ({name: t.name, desc: t.description}))
             if(otags.length > 0){
                 let oTagTable = createTable(['Oracle Tags'], otags, buildTagTableCell('otag'))
-                tagDiv.appendChild(oTagTable)
+                otagBox.appendChild(oTagTable)
+                tagDiv.appendChild(otagBox)
             }
-            
-
-            // Art tags table
-            let atags = tags.filter((t) => t.type === 'ILLUSTRATION_TAG').map((t) => ({name: t.name, desc: t.description}))
-            if(atags.length > 0){
-                let aTagTable = createTable(['Art Tags'], atags, buildTagTableCell('atag'))
-                tagDiv.appendChild(aTagTable)
-            }
-
-            // Relationships
-            if(relationships.length > 0){
-                let relTable = createTable(['Related Cards'], relationships, buildRelationshipCell(json.data.card.name))
-                tagDiv.appendChild(relTable);
-            }
-
-            let divider = document.createElement('div');
-            divider.style.height = '0';
-            divider.style.flexBasis = '100%';
-            tagDiv.appendChild(divider);
 
             // Inherited oracle tags table
             let inheritedOTags = new Map()
@@ -205,9 +188,19 @@ async function addTags(){
             }
             if([...inheritedOTags.values()].length > 0){
                 let iOTagTable = createTable(['Inherited Oracle Tags'], [...inheritedOTags.values()], buildTagTableCell('otag'))
-                tagDiv.appendChild(iOTagTable)
+                otagBox.appendChild(iOTagTable)
+                tagDiv.appendChild(otagBox)
             }
             
+
+            // Art tags table
+            let atagBox = document.createElement('div')
+            let atags = tags.filter((t) => t.type === 'ILLUSTRATION_TAG').map((t) => ({name: t.name, desc: t.description}))
+            if(atags.length > 0){
+                let aTagTable = createTable(['Art Tags'], atags, buildTagTableCell('atag'))
+                atagBox.appendChild(aTagTable)
+                tagDiv.appendChild(atagBox)
+            }
 
             // Inherited art tags table
             let inheritedATags = new Map()
@@ -218,8 +211,20 @@ async function addTags(){
             }
             if([...inheritedATags.values()].length > 0 ){
                 let iATagTable = createTable(['Inherited Art Tags'], [...inheritedATags.values()], buildTagTableCell('atag'))
-                tagDiv.appendChild(iATagTable)
+                atagBox.appendChild(iATagTable)
+                tagDiv.appendChild(atagBox)
             }
+
+            // Relationships
+            if(relationships.length > 0){
+                let relTable = createTable(['Related Cards'], relationships, buildRelationshipCell(json.data.card.name))
+                tagDiv.appendChild(relTable);
+            }
+
+            // let divider = document.createElement('div');
+            // divider.style.height = '0';
+            // divider.style.flexBasis = '100%';
+            // tagDiv.appendChild(divider);
             
             // Move print info and our tag info into the container we made
             cardProfileElement.appendChild(tagDiv)
