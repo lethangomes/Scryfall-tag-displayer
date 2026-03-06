@@ -4,7 +4,7 @@ function buildTagTableCell(query){
         let link = document.createElement('a')
 
         link.innerText = item.name;
-        link.href = 'https://scryfall.com/search?q=' + query + ':' + item.name.replaceAll(' ', '-');
+        link.href = 'https://scryfall.com/search?q=' + query + ':' + item.name.replaceAll(' ', '-').replaceAll('(','').replaceAll(')', '');
 
         if(item.desc){
             let infoIcon = document.createElement('span');
@@ -18,7 +18,7 @@ function buildTagTableCell(query){
     }
 }
 
-let classifierTypes = {
+const classifierTypes = {
     'DEPICTS': {name: 'Depicts', html: '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z"/></svg>'},
     'DEPICTED_IN': {name: 'Depicted in', html: '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z"/></svg>'},
     'COMES_BEFORE': {name: 'Comes before', html: '<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3M3.22302 14C4.13247 18.008 7.71683 21 12 21c4.9706 0 9-4.0294 9-9 0-4.97056-4.0294-9-9-9-3.72916 0-6.92858 2.26806-8.29409 5.5M7 9H3V5"/></svg>'},
@@ -148,7 +148,7 @@ async function addTags(){
 
             // Get information we care about
             console.log(json.data)
-            let tags = json.data.card.taggings;
+            let tags = json.data.card.taggings.filter((t) => t.tag.status != 'REJECTED');
             let relationships = json.data.card.relationships;
             tags = tags.map((t) => ({
                 name: t.tag.name, 
